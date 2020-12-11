@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -10,6 +11,34 @@ const mapStateToProps = state => {
       comments: state.comments
     }
   }
+
+function RenderDish(props) {
+
+    const dish = props.dish;
+
+    if (dish != null) {
+        return(
+            <Card
+            featuredTitle={dish.name}
+            image={{uri: baseUrl + dish.image}}>
+                <Text style={{margin: 10}}>
+                    {dish.description}
+                </Text>
+                <Icon
+                    raised
+                    reverse
+                    name={ props.favorite ? 'heart' : 'heart-o'}
+                    type='font-awesome'
+                    color='#f50'
+                    onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
+                    />
+            </Card>
+        );
+    } 
+    else {
+        return(<View></View>);
+    }
+}
 
 function RenderComments(props) {
 
@@ -35,34 +64,6 @@ function RenderComments(props) {
             />
         </Card>
     );
-}
-
-function RenderDish(props) {
-
-    const dish = props.dish;
-    
-        if (dish != null) {
-            return(
-                <Card
-                featuredTitle={dish.name}
-                image={{uri: baseUrl + dish.image}}>
-                    <Text style={{margin: 10}}>
-                        {dish.description}
-                    </Text>
-                    <Icon
-                        raised
-                        reverse
-                        name={ props.favorite ? 'heart' : 'heart-o'}
-                        type='font-awesome'
-                        color='#f50'
-                        onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
-                        />
-                </Card>
-            );
-        } 
-        else {
-            return(<View></View>);
-        }
 }
 
 class  Dishdetail extends Component {

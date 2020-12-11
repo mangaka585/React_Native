@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { Text, ScrollView, View } from 'react-native';
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -7,7 +8,6 @@ import { baseUrl } from '../shared/baseUrl';
 const mapStateToProps = state => {
     return {
       dishes: state.dishes,
-      comments: state.comments,
       promotions: state.promotions,
       leaders: state.leaders
     }

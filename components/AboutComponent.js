@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { Text, FlatList, ScrollView } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -48,7 +49,7 @@ class About extends Component {
                 <Card title="Corporate Leadership">
                 <FlatList 
                     data={this.props.leaders.leaders}
-                    renderItem={renderLeader}
+                    renderItem={renderLeaderItem}
                     keyExtractor={item => item.id.toString()}
                     />
                 </Card>
