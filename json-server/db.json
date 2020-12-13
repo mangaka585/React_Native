@@ -201,6 +201,56 @@
       "comment": "It's your birthday, we're gonna party!",
       "author": "25 Cent",
       "date": "2011-12-02T17:57:28.556094Z"
+    },
+    {
+      "rating": "",
+      "author": "",
+      "comment": "",
+      "date": "2020-12-13T16:37:32.266Z",
+      "id": 20
+    },
+    {
+      "rating": "",
+      "author": "",
+      "comment": "",
+      "date": "2020-12-13T16:37:35.864Z",
+      "id": 21
+    },
+    {
+      "rating": "",
+      "author": "",
+      "comment": "",
+      "date": "2020-12-13T16:38:53.484Z",
+      "id": 22
+    },
+    {
+      "rating": "",
+      "author": "",
+      "comment": "",
+      "date": "2020-12-13T16:38:55.620Z",
+      "id": 23
+    },
+    {
+      "rating": "",
+      "author": "",
+      "comment": "",
+      "date": "2020-12-13T16:39:01.361Z",
+      "id": 24
+    },
+    {
+      "rating": 5,
+      "author": "Alex Romanov",
+      "comment": "My comment",
+      "date": "2020-12-13T20:09:16.074Z",
+      "id": 25
+    },
+    {
+      "dishId": 0,
+      "rating": 4,
+      "author": "Mine 2",
+      "comment": "Comment 2",
+      "date": "2020-12-13T20:20:25.639Z",
+      "id": 26
     }
   ],
   "promotions": [
@@ -264,8 +314,6 @@
       "date": "2017-12-04T09:41:49.890Z",
       "id": 1
     }
-  ], 
-  "favorites": [
-
-  ]
+  ],
+  "favorites": []
 }
