@@ -25,13 +25,11 @@ function RenderComments(props) {
             
     const renderCommentItem = ({item, index}) => {
         
-        let normalDate = item.date.format("YYYY-MM-DDTHH:mm:ss.SSSZZ");
-        
         return (
             <View key={index} style={{margin: 10}}>
                 <Text style={{fontSize: 14}}>{item.comment}</Text>
                 <Rating imageSize={10} startingValue={item.rating} readonly='true' style={{ paddingVertical: 3, alignSelf: 'flex-start'}} />
-                <Text style={{fontSize: 12}}>{'-- ' + item.author + ', ' + normalDate} </Text>
+                <Text style={{fontSize: 12}}>{'-- ' + item.author + ', ' + item.date} </Text>
             </View>
         );
     };
