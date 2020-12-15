@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Animatable from 'react-native-animatable';
 import { Component } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { Tile } from 'react-native-elements';
@@ -22,14 +23,16 @@ class Menu extends Component {
 
         const renderMenuItem = ({item, index}) => {
             return (
-                <Tile
-                    key={index}
-                    title={item.name}
-                    caption={item.description}
-                    featured
-                    onPress={() => navigate('Dishdetail', { dishId: item.id })}
-                    imageSrc={{ uri: baseUrl + item.image}}
-                    />
+                <Animatable.View animation="fadeInRightBig" duration={2000}>  
+                    <Tile
+                        key={index}
+                        title={item.name}
+                        caption={item.description}
+                        featured
+                        onPress={() => navigate('Dishdetail', { dishId: item.id })}
+                        imageSrc={{ uri: baseUrl + item.image}}
+                        />
+                </Animatable.View>
             );
         };
         const { navigate } = this.props.navigation;
