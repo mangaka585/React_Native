@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "expo": "~39.0.0",
+    "expo-image-manipulator": "~8.3.0",
     "expo-image-picker": "~9.1.1",
     "expo-permissions": "~9.3.0",
     "expo-secure-store": "~9.2.0",
