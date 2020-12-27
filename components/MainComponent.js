@@ -320,29 +320,29 @@ class Main extends Component {
   });
   
   window.value=NetInfo.addEventListener((connectionInfo)=>this.handleConnectivityChange(connectionInfo)) ;
-}
-
-componentWillUnmount() {
-  window.value();
-}
-
-handleConnectivityChange = (connectionInfo) => {
-switch (connectionInfo.type) {
-    case 'none': 
-        ToastAndroid.show ('You are now offline', ToastAndroid.LONG);
-        break;
-    case 'wifi':
-        ToastAndroid.show ('You are now on WiFi', ToastAndroid.LONG);
-        break;
-    case 'cellular':
-        ToastAndroid.show ('You are now on Cellular', ToastAndroid.LONG);
-        break;
-    case 'unknown' :
-        ToastAndroid.show ('You are now have an Unknown connection', ToastAndroid.LONG);
-        break;
-    default: 
   }
-}
+
+  componentWillUnmount() {
+    window.value();
+  }
+
+  handleConnectivityChange = (connectionInfo) => {
+  switch (connectionInfo.type) {
+      case 'none': 
+          ToastAndroid.show ('You are now offline', ToastAndroid.LONG);
+          break;
+      case 'wifi':
+          ToastAndroid.show ('You are now on WiFi', ToastAndroid.LONG);
+          break;
+      case 'cellular':
+          ToastAndroid.show ('You are now on Cellular', ToastAndroid.LONG);
+          break;
+      case 'unknown' :
+          ToastAndroid.show ('You are now have an Unknown connection', ToastAndroid.LONG);
+          break;
+      default: 
+    }
+  }
 
   render() {
  

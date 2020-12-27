@@ -57,7 +57,7 @@ class Reservation extends Component {
         });
     }
 
-    async GetCalendarPermission () {
+    async obtainCalendarPermission () {
         let permission = await Permissions.getAsync(Permissions.CALENDAR);
         if (permission.status !== 'granted') {
             permission = await Permissions.askAsync(Permissions.CALENDAR);
@@ -71,19 +71,30 @@ class Reservation extends Component {
         return permission;
     }
 
-    /*addReservationToCalendar(date) {
-        Calendar.createEventAsync(id, {
-            'Con Fusion Table Reservation', 
-            date,
-            Date.parse(this.state.date) + 7200000,
+    async getDefaultCalendarSource() {
+        console.log('Trying get default calendar');
+        const calendars = await Calendar.getCalendarsAsync();
+        const defaultCalendars = calendars.filter(each => each.title === 'Samsung Calendar');
+        return defaultCalendars[0].id;
+    }
 
-        });
-    }*/
+    // addReservationToCalendar(date) {
+    //     Calendar.createEventAsync(
+    //         this.getDefaultCalendarSource(), {
+    //         'Con Fusion Table Reservation', 
+    //         date,
+    //         Date.parse(this.state.date) + 7200000,
+
+    //     });
+    // }
 
     handleReservation() {
         console.log('handleReservation');
         //this.addReservationToCalendar(this.state.date);
-        //this.GetCalendarPermission();
+        //this.obtainCalendarPermission();
+        //this.getDefaultCalendarSource();
+        this.presentLocalNotification(this.state.date); 
+        this.resetForm(); 
     }
 
     showAlert(){
@@ -99,7 +110,7 @@ class Reservation extends Component {
                     },
                     {
                         text: 'OK',
-                        onPress: () => {this.presentLocalNotification(this.state.date); this.resetForm(); this.handleReservation();}
+                        onPress: () => {this.handleReservation();}
                     }
                 ],
                 { cancelable: false }
