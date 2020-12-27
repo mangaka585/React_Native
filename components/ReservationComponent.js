@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { Text, View, StyleSheet, Picker, Switch, Button, Modal, ScrollView, Alert } from 'react-native';
-import DatePicker from 'react-native-datepicker'
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import * as Calendar from 'expo-calendar';
 
 class Reservation extends Component {
 
@@ -13,8 +14,11 @@ class Reservation extends Component {
         this.state = {
             guests: 1,
             smoking: false,
-            date: '',
-            showModal: false
+            date: new Date(),
+            time: new Date(),
+            show: false,
+            showModal: false,
+            mode: "date",
         }
     }
 
@@ -24,11 +28,6 @@ class Reservation extends Component {
 
     toggleModal() {
         this.setState({showModal: !this.state.showModal});
-    }
-
-    handleReservation() {
-        console.log(JSON.stringify(this.state));
-        this.toggleModal();
     }
 
     async obtainNotificationPermission() {
@@ -58,6 +57,35 @@ class Reservation extends Component {
         });
     }
 
+    async GetCalendarPermission () {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.CALENDAR);
+            const calendars = await Calendar.getCalendarsAsync();
+            console.log('Here are all your calendars:');
+            console.log({ calendars });
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to use calendar');
+            }
+        }
+        return permission;
+    }
+
+    /*addReservationToCalendar(date) {
+        Calendar.createEventAsync(id, {
+            'Con Fusion Table Reservation', 
+            date,
+            Date.parse(this.state.date) + 7200000,
+
+        });
+    }*/
+
+    handleReservation() {
+        console.log('handleReservation');
+        //this.addReservationToCalendar(this.state.date);
+        //this.GetCalendarPermission();
+    }
+
     showAlert(){
         return(
             Alert.alert(
@@ -71,7 +99,7 @@ class Reservation extends Component {
                     },
                     {
                         text: 'OK',
-                        onPress: () => {this.presentLocalNotification(this.state.date); this.resetForm();}
+                        onPress: () => {this.presentLocalNotification(this.state.date); this.resetForm(); this.handleReservation();}
                     }
                 ],
                 { cancelable: false }
@@ -83,66 +111,72 @@ class Reservation extends Component {
         this.setState({
             guests: 1,
             smoking: false,
-            date: '',
-            showModal: false
+            date: new Date(),
+            time: new Date(),
+            show: false,
+            showModal: false,
+            mode: "date",
         });
     }
     
     render() {
+        const showDatepicker = () => {
+            this.setState({ show: true });
+        };
         return(
             <ScrollView>
                 <Animatable.View animation="zoomIn" duration={500} delay={1000}>
                     <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Number of Guests</Text>
-                    <Picker
-                        style={styles.formItem}
-                        selectedValue={this.state.guests}
-                        onValueChange={(itemValue, itemIndex) => this.setState({guests: itemValue})}>
-                        <Picker.Item label="1" value="1" />
-                        <Picker.Item label="2" value="2" />
-                        <Picker.Item label="3" value="3" />
-                        <Picker.Item label="4" value="4" />
-                        <Picker.Item label="5" value="5" />
-                        <Picker.Item label="6" value="6" />
-                    </Picker>
+                        <Text style={styles.formLabel}>Number of Guests</Text>
+                        <Picker
+                            style={styles.formItem}
+                            selectedValue={this.state.guests}
+                            onValueChange={(itemValue, itemIndex) => this.setState({guests: itemValue})}>
+                            <Picker.Item label="1" value="1" />
+                            <Picker.Item label="2" value="2" />
+                            <Picker.Item label="3" value="3" />
+                            <Picker.Item label="4" value="4" />
+                            <Picker.Item label="5" value="5" />
+                            <Picker.Item label="6" value="6" />
+                        </Picker>
                     </View>
                     <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Smoking/Non-Smoking?</Text>
-                    <Switch
-                        style={styles.formItem}
-                        value={this.state.smoking}
-                        onTintColor='#512DA8'
-                        onValueChange={(value) => this.setState({smoking: value})}>
-                    </Switch>
+                        <Text style={styles.formLabel}>Smoking/Non-Smoking?</Text>
+                        <Switch
+                            style={styles.formItem}
+                            value={this.state.smoking}
+                            onTintColor='#512DA8'
+                            onValueChange={(value) => this.setState({smoking: value})}>
+                        </Switch>
                     </View>
                     <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Date and Time</Text>
-                    <DatePicker
-                        style={{flex: 2, marginRight: 20}}
-                        date={this.state.date}
-                        format=''
-                        mode="datetime"
-                        placeholder="select date and Time"
-                        minDate="2017-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                        }}
-                        onDateChange={(date) => {this.setState({date: date})}}
-                    />
+                        <Text style={styles.formLabel}>Date and Time</Text>
+                        <Text style={styles.formItem} onPress={showDatepicker}>
+                            {this.state.date.toDateString()} {this.state.time.toTimeString()}
+                        </Text>
+                        {this.state.show && (
+                        <DateTimePicker
+                            value={this.state.date}
+                            mode={this.state.mode}
+                            display="default"
+                            minimumDate={new Date()}
+                            onChange={(selected, value) => {
+                                if (value !== undefined) {
+                                this.setState({
+                                    show: this.state.mode === "time" ? false : true,
+                                    mode: "time",
+                                    date: new Date(selected.nativeEvent.timestamp),
+                                    time: new Date(selected.nativeEvent.timestamp),
+                                });
+                                } else {
+                                this.setState({ show: false });
+                                }
+                            }}
+                        />
+                        )}
                     </View>
                     <View style={styles.formRow}>
                     <Button
-                        //onPress={() => this.handleReservation()}
                         onPress={() => this.showAlert()}
                         title="Reserve"
                         color="#512DA8"

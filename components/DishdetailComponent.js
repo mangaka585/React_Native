@@ -46,7 +46,7 @@ function RenderComments(props) {
     };
     
     return (
-        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+        <Animatable.View animation="fadeInUp" duration={2000} delay={1000} useNativeDriver={true}>
             <Card title='Comments' >
             <FlatList 
                 data={comments}
@@ -102,7 +102,7 @@ function RenderDish(props) {
     
         if (dish != null) {
             return(
-                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}  ref={viewRef} {...panResponder.panHandlers}>
+                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}  ref={viewRef} {...panResponder.panHandlers} useNativeDriver={true}>
                     <Card
                     featuredTitle={dish.name}
                     image={{uri: baseUrl + dish.image}}>

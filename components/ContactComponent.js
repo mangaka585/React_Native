@@ -20,7 +20,7 @@ class Contact extends Component {
 
     render() {
         return(
-            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>                
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000} useNativeDriver={true}>                
                 <Card
                     title='Contact Information'>
                     <Text style={{margin: 10}}>
