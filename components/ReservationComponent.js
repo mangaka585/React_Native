@@ -57,42 +57,59 @@ class Reservation extends Component {
         });
     }
 
-    async obtainCalendarPermission () {
-        let permission = await Permissions.getAsync(Permissions.CALENDAR);
-        if (permission.status !== 'granted') {
-            permission = await Permissions.askAsync(Permissions.CALENDAR);
-            const calendars = await Calendar.getCalendarsAsync();
-            console.log('Here are all your calendars:');
-            console.log({ calendars });
-            if (permission.status !== 'granted') {
-                Alert.alert('Permission not granted to use calendar');
-            }
-        }
-        return permission;
-    }
-
     async getDefaultCalendarSource() {
-        console.log('Trying get default calendar');
-        const calendars = await Calendar.getCalendarsAsync();
-        const defaultCalendars = calendars.filter(each => each.title === 'Samsung Calendar');
-        return defaultCalendars[0].id;
+        await Calendar.getCalendarsAsync().then((id) => console.log(id))
     }
-
-    // addReservationToCalendar(date) {
-    //     Calendar.createEventAsync(
-    //         this.getDefaultCalendarSource(), {
-    //         'Con Fusion Table Reservation', 
-    //         date,
-    //         Date.parse(this.state.date) + 7200000,
-
-    //     });
-    // }
+      
+    async obtainCalendarPermission() {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR)
+        if (permission.status !== 'granted') {
+        permission = await Permissions.askAsync(Permissions.CALENDAR)
+        return
+        }
+        if (permission.status !== 'granted') {
+        permission = await Permissions.askAsync(Permissions.REMINDERS)
+        return
+    
+        if (permission.status !== 'granted') {
+            Alert.alert('Permission not granted to calendar')
+        }
+        }
+        return permission
+    }
+    async addReservationToCalendar(date) {
+        await this.obtainCalendarPermission()
+        var dateMs = Date.parse(date)
+        var startDate = new Date(dateMs)
+        var endDate = new Date(dateMs + 2 * 60 * 60 * 1000)
+    
+        getDefaultCalendarSource()
+        const newCalendar = await Calendar.createCalendarAsync({
+        title: 'Test Reservation',
+        color: '#512DA8',
+        entityType: Calendar.EntityTypes.EVENT,
+        sourceId: getDefaultCalendarSource.id,
+        source: getDefaultCalendarSource,
+        name: 'Restauran Reservation',
+        ownerAccount: 'personal',
+        accessLevel: Calendar.CalendarAccessLevel.OWNER,
+        })
+    
+        .then((id) => {
+            Calendar.createEventAsync(id, {
+            title: 'Table Reservation',
+            startDate: startDate,
+            endDate: endDate,
+            timeZone: 'Asia/Hong_Kong',
+            location:
+                '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong',
+            }).catch((err) => console.log(err))
+        })
+        .catch((err) => console.log(err))
+    }
 
     handleReservation() {
-        console.log('handleReservation');
-        //this.addReservationToCalendar(this.state.date);
-        //this.obtainCalendarPermission();
-        //this.getDefaultCalendarSource();
+        this.addReservationToCalendar(this.state.date);
         this.presentLocalNotification(this.state.date); 
         this.resetForm(); 
     }
